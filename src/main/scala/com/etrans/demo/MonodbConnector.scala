@@ -1,10 +1,10 @@
 package com.etrans.demo
 
+import com.mongodb.spark._
+import com.mongodb.spark.config.WriteConfig
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.SparkSession
 import org.bson.Document
-import com.mongodb.spark._
-import com.mongodb.spark.config.WriteConfig
 
 import scala.collection.JavaConverters._
 
@@ -15,11 +15,14 @@ object MonodbConnector {
     val spark = SparkSession.builder()
                   .master("local")
                   .appName("zyLocal")
-                  .config("spark.mongodb.input.uri", "mongodb://10.10.4.138:27017/coach_business.alarm_info_181020?readPreference=primaryPreferred")
-                  .config("spark.mongodb.output.uri", "mongodb://10.10.4.138:27017/coach_business.output")
+                  .config("spark.mongodb.input.uri", "mongodb://10.10.5.21:20000/coach_business_test.gps_info_181201?readPreference=primaryPreferred")
+                  .config("spark.mongodb.output.uri", "mongodb://10.10.5.21:20000/coach_business_test.output")
                   .getOrCreate();
 
     val sc = spark.sparkContext;
+
+    val accAnalyser = new AccAnalyser
+    accAnalyser.analyser(spark)
 
 //    val document = sc.parallelize((1 to 10).map( a => Document.parse(s"{spark:$a}")))
 
@@ -27,13 +30,9 @@ object MonodbConnector {
 
 //    sparkSaveTest(sc);
 
-    scalaMethodWriterTest(sc);
-
-
+//    scalaMethodWriterTest(sc);
 
 //    val rd2 = sc.loadFromMongoDB(ReadConfig(Map("uri" -> "mongodb://10.10.4.138:27017/coach_business.alarm_info_181021"))).cache()
-
-
 
   }
 

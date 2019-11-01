@@ -13,9 +13,8 @@ class Writer {
     f(seq, sc)
   }
 
-  val writerDoc = (docs : Seq[Document], sc : SparkContext) => {
+  def writerDoc = (docs : Seq[Document], sc : SparkContext) => {
     val rdd = sc.parallelize(docs)
-    rdd.toJavaRDD()
     MongoSpark.save(rdd)
   }
 
